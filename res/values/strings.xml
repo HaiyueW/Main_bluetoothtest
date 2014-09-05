@@ -39,5 +39,12 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_splash">Splash</string>
     <string name="startscreen">Start</string>
+    <string name="title_activity_bluetooth">Bluetooth</string>
+    <string name="bluetooth">Bluetooth Setting</string>
+    <string name="blueon">Turn On</string>
+    <string name="bluevisible">Get Visible</string>
+    <string name="bluepair">Paired Devices</string>
+    <string name="blueoff">Turn Off</string>
+    <string name="bluesearch">Search Devices</string>
 
 </resources>

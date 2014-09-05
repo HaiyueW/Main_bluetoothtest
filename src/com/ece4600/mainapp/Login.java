@@ -41,7 +41,7 @@ public void onClick(View v) {
 	switch(v.getId()){
 	case R.id.login:
 		if(user.equals("user") && pass.equals("pass")){
-			Intent i = new Intent(Login.this,MainActivity.class);
+			Intent i = new Intent(Login.this,Bluetooth.class);
 			startActivity(i);
 			Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

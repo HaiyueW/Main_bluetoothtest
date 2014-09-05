@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ece4600.mainapp.Bluetooth" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true" 
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/bluetooth"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/bluetooth"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/blueon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/blueon"
+                android:textSize="20sp" 
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/bluevisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bluevisible"
+                android:textSize="20sp" 
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/bluesearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bluesearch" 
+                android:textSize="20sp" 
+                android:onClick="onClick" />
+            
+            <Button
+                android:id="@+id/bluepair"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bluepair"
+                android:textSize="20sp" 
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/blueoff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/blueoff"
+                android:textSize="20sp" 
+                android:onClick="onClick" />
+
+            <ListView
+                android:id="@+id/bluelist"
+                android:layout_width="match_parent"
+                android:layout_height="248dp"
+                android:visibility="visible" >
+            </ListView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

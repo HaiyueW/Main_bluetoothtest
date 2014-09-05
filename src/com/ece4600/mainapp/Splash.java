@@ -29,7 +29,7 @@ public class Splash extends Activity {
 			@Override
 			public void onClick(View v) {
 				if(user.equals("user") && pass.equals("pass")){
-					startActivity(new Intent(Splash.this, MainActivity.class));
+					startActivity(new Intent(Splash.this, Bluetooth.class));
 					finish();
 				}
 				else{
