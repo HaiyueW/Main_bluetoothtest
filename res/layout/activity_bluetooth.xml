@@ -75,7 +75,9 @@
                 android:id="@+id/bluelist"
                 android:layout_width="match_parent"
                 android:layout_height="248dp"
-                android:visibility="visible" >
+                android:visibility="visible"
+                tools:listitem="@android:layout/simple_list_item_checked" >
+
             </ListView>
 
         </LinearLayout>
