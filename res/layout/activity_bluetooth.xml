@@ -9,7 +9,7 @@
     tools:context="com.ece4600.mainapp.Bluetooth" >
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/scrollmain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true" 
@@ -52,8 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/bluesearch" 
-                android:textSize="20sp" 
-                android:onClick="onClick" />
+                android:textSize="20sp" />
             
             <Button
                 android:id="@+id/bluepair"
@@ -72,15 +71,33 @@
                 android:onClick="onClick" />
 
             <ListView
-                android:id="@+id/bluelist"
+                android:id="@+id/bluepairedlist"
                 android:layout_width="match_parent"
                 android:layout_height="248dp"
                 android:visibility="visible"
-                tools:listitem="@android:layout/simple_list_item_checked" >
+                tools:listitem="@android:layout/simple_list_item_1" >
 
             </ListView>
 
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:scaleType="center"
+        android:visibility="invisible" >
+
+        <ListView
+            android:id="@+id/bluenewlist"
+            android:layout_width="match_parent"
+            android:layout_height="248dp"
+            android:visibility="invisible"
+            android:layout_marginTop="267dp"
+            tools:listitem="@android:layout/simple_list_item_1" >
+        </ListView>
+
+    </LinearLayout>
 
 </RelativeLayout>
