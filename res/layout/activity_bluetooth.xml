@@ -82,22 +82,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:scaleType="center"
-        android:visibility="invisible" >
-
-        <ListView
-            android:id="@+id/bluenewlist"
-            android:layout_width="match_parent"
-            android:layout_height="248dp"
-            android:visibility="invisible"
-            android:layout_marginTop="267dp"
-            tools:listitem="@android:layout/simple_list_item_1" >
+    <ListView android:id="@+id/bluenewlist" android:layout_width="match_parent" android:layout_height="248dp" android:visibility="invisible" android:layout_marginTop="267dp" tools:listitem="@android:layout/simple_list_item_1">
         </ListView>
-
-    </LinearLayout>
 
 </RelativeLayout>

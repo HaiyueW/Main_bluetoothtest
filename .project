@@ -3,6 +3,7 @@
 	<name>Mainapp</name>
 	<comment></comment>
 	<projects>
+		<project>bluetooth-crash-resolver</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

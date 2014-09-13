@@ -1,5 +1,7 @@
 package com.ece4600.mainapp;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -9,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +30,7 @@ public class Bluetooth extends Activity{
 	private Set<BluetoothDevice> pairedDevices;
 	private ListView listpaired, listnew;
 	private ArrayAdapter<String> adapter, adapter_search;
+	private List<BluetoothDevice> checkList = new ArrayList<BluetoothDevice>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +47,12 @@ public class Bluetooth extends Activity{
 		listnew.setOnItemClickListener(mDeviceClickListener);
 		myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         // Register for broadcasts when a device is discovered
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(mReceiver, filter);
-        // Register for broadcasts when discovery has finished
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        this.registerReceiver(mReceiver, filter);
-        ArrayAdapter<String> adapter_search = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+		IntentFilter bluetoothFilter = new IntentFilter();
+		bluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
+		bluetoothFilter.addAction(BluetoothDevice.ACTION_FOUND);
+		bluetoothFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		registerReceiver(mReceiver, bluetoothFilter);
+		adapter_search = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 		listnew.setAdapter(adapter_search);
 		
 		bluesearch.setOnClickListener(new OnClickListener() {
@@ -63,26 +65,24 @@ public class Bluetooth extends Activity{
 	    });
 	}
 	
-//	 protected void onDestroy() {
-//	        super.onDestroy();
-//	        // Make sure we're not doing discovery anymore
-//	        if (myBluetoothAdapter != null) {
-//	            myBluetoothAdapter.cancelDiscovery();
-//	        }
-//	        // Unregister broadcast listeners
-//	        this.unregisterReceiver(mReceiver);
-//	    }
+	 protected void onDestroy() {
+	        super.onDestroy();
+	        // Make sure we're not doing discovery anymore
+	        if (myBluetoothAdapter != null) {
+	            myBluetoothAdapter.cancelDiscovery();
+	        }
+	        // Unregister broadcast listeners
+	        this.unregisterReceiver(mReceiver);
+	    }
 
 	    private void doDiscovery() {
-	        if (true)
-	            Log.d("DeviceListActivity", "doDiscovery()");
-	        // Indicate scanning in the title
-	        setProgressBarIndeterminateVisibility(true);
 	        if (myBluetoothAdapter.isDiscovering()) {
+	        	adapter_search.clear();
 	        	myBluetoothAdapter.cancelDiscovery();
 	        }
 	        // Request discover from BluetoothAdapter
-	        myBluetoothAdapter.startDiscovery();
+	        adapter_search.clear();
+			myBluetoothAdapter.startDiscovery();
 	    }
 	    
 	final BroadcastReceiver mReceiver = new BroadcastReceiver(){
@@ -91,9 +91,17 @@ public class Bluetooth extends Activity{
 			String action = intent.getAction();
 			if(BluetoothDevice.ACTION_FOUND.equals(action)){
 				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-				Toast.makeText(getApplicationContext(), "Searching Devices", Toast.LENGTH_SHORT).show();						
-				adapter_search.add(device.getName() + "\n" +device.getAddress());
-				adapter_search.notifyDataSetChanged();
+				if(!checkList.contains(device)){
+					checkList.add(device);
+					adapter_search.add(device.getName() + "\n" +device.getAddress());
+	   				adapter_search.notifyDataSetChanged();
+	   				Toast.makeText(getApplicationContext(), "Devices Found", Toast.LENGTH_SHORT).show();
+	   				}				
+			}else if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
+				Toast.makeText(getApplicationContext(), "Searching Devices", Toast.LENGTH_SHORT).show();
+			}else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+				Toast.makeText(getApplicationContext(), "Finish Searching Devices", Toast.LENGTH_SHORT).show();
+				checkList.clear();
 			}else{
 				Toast.makeText(getApplicationContext(), "No Devices has been found", Toast.LENGTH_SHORT).show();	
 			}
@@ -120,7 +128,7 @@ public class Bluetooth extends Activity{
 	}
 
 	public void onClick(View v) {
-		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
 		listpaired.setAdapter(adapter);
 		switch (v.getId()) {
 		case R.id.blueon:
@@ -146,6 +154,8 @@ public class Bluetooth extends Activity{
 			startActivityForResult(discover, 0);
 			break;
 		case R.id.bluepair:
+			listnew.setVisibility(View.GONE);
+            listpaired.setVisibility(View.VISIBLE);
 			pairedDevices = myBluetoothAdapter.getBondedDevices();
 			if (pairedDevices == null || pairedDevices.size() == 0) { 
 				Toast.makeText(getApplicationContext(), "No Paired Devices Found", Toast.LENGTH_SHORT).show();
@@ -154,14 +164,6 @@ public class Bluetooth extends Activity{
 					adapter.add(device.getName() + "\n" +device.getAddress());
 					}
 				Toast.makeText(getApplicationContext(), "Showing Paired Devices", Toast.LENGTH_SHORT).show();
-//				listv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//					@Override
-//					public void onItemClick(AdapterView<?> parent, View viewClicked,int position, long id) {
-//						Toast.makeText(getApplicationContext(), "Connected to paired device", Toast.LENGTH_SHORT).show();
-//						startActivity(new Intent(Bluetooth.this, MainActivity.class));
-//						finish();
-//					}
-//				});
 			}
 			break;
 		default:
@@ -173,18 +175,11 @@ public class Bluetooth extends Activity{
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
             // Cancel discovery because it's costly and we're about to connect
             myBluetoothAdapter.cancelDiscovery();
-            // Get the device MAC address, which is the last 17 chars in the View
-            String info = ((TextView) v).getText().toString();
-            String address = info.substring(info.length() - 17);
-            // Create the result Intent and include the MAC address
-            Intent intent = new Intent();
-            intent.putExtra("device_address", address);
-            // Set result and finish this Activity
-            setResult(Activity.RESULT_OK, intent);
-            finish();
 			Toast.makeText(getApplicationContext(), "Connected to Bluetooth device", Toast.LENGTH_SHORT).show();
 			startActivity(new Intent(Bluetooth.this, MainActivity.class));
 			finish();
         }
     };
 }
+
+
